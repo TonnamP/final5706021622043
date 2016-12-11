@@ -37,6 +37,7 @@ app.post('/webhook/', function (req, res) {
           sendTextMessage(sender, "สภาพอากาศวันนี้ " + "อุณหภูมิ " + condition.temp + "อุณหภูมิสูง " + condition.temp_max + "อุณหภูมิต่ำสุด " + condition.temp_min + "จังหวัด " + city.name + "," + country.country);
         } catch(err) {
           console.error('error caught', err);
+           sendTextMessage(sender, "ไม่พบจังหวัดที่ท่านกรอกมา กรุณากรอกจังหวัดใหม่อีกครั้ง");
         }
       })
 
