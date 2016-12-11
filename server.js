@@ -34,7 +34,10 @@ app.post('/webhook/', function (req, res) {
           var condition = body.main;
           var country = body.sys;
           var city = body;
-          sendTextMessage(sender, "สภาพอากาศวันนี้ อุณหภูมิ " + condition.temp + "\nอุณหภูมิสูง " + condition.temp_max + "\nอุณหภูมิต่ำสุด " + condition.temp_min + " \nจังหวัด " + city.name + "," + country.country);
+          sendTextMessage(sender, "สภาพอากาศวันนี้ อุณหภูมิ " + condition.temp);
+          sendTextMessage(sender, "อุณหภูมิสูง " + condition.temp_max);
+          sendTextMessage(sender, "อุณหภูมิต่ำสุด " + condition.temp_min);
+          sendTextMessage(sender, "จังหวัด " + city.name + "," + country.country);
         } catch(err) {
           console.error('error caught', err);
         }
