@@ -4,7 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
-const token = 'EAACgaCxz5LABAF2kK4lotinibXSEAPbhfQOKivQj9mHM2HhKlvxqivvrq4D14L9EGYK2llqCFids8rT4GcWZBrZCbn6Wn3yUxyG8klMAbzrndfW5JzyJRrC72ZAxpd8K1wNTi0YmUGrUs4GxG6c9QOOjwuG6CPpnDMFv02tJQZDZD'
+const token = 'EAACgaCxz5LABAEowN9yqaU102iEwBZBTQUvqT4ZAk61kQrkvABZBaSISg8tZCIOYLmCzSJdSZB2fxBfDRyTujPeEUfZCnppZAEkHsRi5OxnAfuZAepj0ZAl8h3s2qoHt71b1pSG8WeZBoFou8m7q5sYpZCfOLcouhigsflDvwUEnlnf4gZDZD'
 app.set('port', (process.env.PORT || 5000))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
   res.send('test test')
 })
 app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === 'passbot') {
+  if (req.query['hub.verify_token'] === '123456') {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong token')
@@ -29,25 +29,26 @@ app.post('/webhook/', function (req, res) {
       request({
         url: weatherEndpoint,
         json: true
-      },
-      function(error, response, body) {
+      }, function(error, response, body) {
         try {
           var condition = body.main;
-          sendTextMessage(sender, "Weather Today is " + condition.temp + "Celsius, Location : " + location);
+          sendTextMessage(sender, "Weather Today is " + condition.temp + "Location is " + location);
         } catch(err) {
           console.error('error caught', err);
-          sendTextMessage(sender, "There was an error.");
+          sendTextMessage(sender, "Please input your city");
         }
       })
+
       if (text === 'Generic') {
         sendGenericMessage(sender)
         continue
       }
-      sendTextMessage(sender, ' ' + text.substring(0, 200))
+      var text2 = text.split(' ')
+      sendTextMessage(sender, parseInt(text2[0]) + parseInt(text2[1]) )
     }
     if (event.postback) {
       let text = JSON.stringify(event.postback)
-      sendTextMessage(sender, ' ' + text.substring(0, 200), token)
+      sendTextMessage(sender, 'Postback received: ' + text.substring(0, 200), token)
       continue
     }
   }
@@ -79,26 +80,29 @@ function sendGenericMessage (sender) {
       'type': 'template',
       'payload': {
         'template_type': 'generic',
-        'elements': [
-          {
-            'title': 'Welcome to Weather',
-            'item_url': 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2d6e9e5d9dbe0cd3dece925dc0c5dd41',
-            'image_url': 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2d6e9e5d9dbe0cd3dece925dc0c5dd41',
-            'subtitle': 'We got the right hat for everyone.',
-            'buttons': [
-              {
-                'type': 'web_url',
-                'url': 'https://petersfancybrownhats.com',
-                'title': 'View Website'
-              },
-              {
-                'type': 'postback',
-                'title': 'Start Chatting',
-                'payload': 'DEVELOPER_DEFINED_PAYLOAD'
-              }
-            ]
-          }
-        ]
+        'elements': [{
+          'title': 'First card',
+          'subtitle': 'Element #1 of an hscroll',
+          'image_url': 'http://messengerdemo.parseapp.com/img/rift.png',
+          'buttons': [{
+            'type': 'web_url',
+            'url': 'https://www.messenger.com',
+            'title': 'web url'
+          }, {
+            'type': 'postback',
+            'title': 'Postback',
+            'payload': 'Payload for first element in a generic bubble'
+          }]
+        }, {
+          'title': 'Second card',
+          'subtitle': 'Element #2 of an hscroll',
+          'image_url': 'http://messengerdemo.parseapp.com/img/gearvr.png',
+          'buttons': [{
+            'type': 'postback',
+            'title': 'Postback',
+            'payload': 'Payload for second element in a generic bubble'
+          }]
+        }]
       }
     }
   }
