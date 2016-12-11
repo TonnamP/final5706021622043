@@ -60,6 +60,32 @@ function sendTextMessage (sender, text) {
 
 function sendGenericMessage (sender) {
   let messageData = {
+      'attachment':{
+    'type':'template',
+    'payload':{
+      'template_type':'generic',
+       'elements':[
+         {
+           'title':'Welcome to Weather',
+           'item_url':'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2d6e9e5d9dbe0cd3dece925dc0c5dd41',
+           "image_url":"http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2d6e9e5d9dbe0cd3dece925dc0c5dd41",
+           "subtitle":"We\'ve got the right hat for everyone.",
+           "buttons":[
+             {
+               "type":"web_url",
+               "url":"https://petersfancybrownhats.com",
+               "title":"View Website"
+             },
+             {
+               "type":"postback",
+               "title":"Start Chatting",
+               "payload":"DEVELOPER_DEFINED_PAYLOAD"
+             }
+           ]
+         }
+       ]
+     }
+   },
     'attachment': {
       'type': 'template',
       'payload': {
