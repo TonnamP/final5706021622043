@@ -35,7 +35,6 @@ app.post('/webhook/', function (req, res) {
           sendTextMessage(sender, "Weather Today is " + condition.temp + "Location is " + location);
         } catch(err) {
           console.error('error caught', err);
-          sendTextMessage(sender, "Please input your city");
         }
       })
 
